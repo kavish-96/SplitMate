@@ -27,12 +27,6 @@ A full-stack expense splitting application built with **Angular** and **ASP.NET 
 
 SplitMate is a modern web application that simplifies the process of splitting expenses among groups. Whether it's a trip with friends, shared apartment costs, or office lunches, SplitMate helps you track who paid what and calculates the optimal way to settle debts.
 
-### Technology Distribution
-- **Frontend (Angular)**: ~90% of the codebase
-- **Backend (ASP.NET Core)**: ~10% of the codebase
-
-This distribution demonstrates full-stack development skills while emphasizing frontend expertise.
-
 ---
 
 ## ✨ Features
@@ -59,13 +53,6 @@ This distribution demonstrates full-stack development skills while emphasizing f
 - Shows who owes whom and exact amounts
 - Mark settlements as complete
 - Settlement history tracking
-
-### 🎨 Modern UI/UX
-- Clean, minimal design with gradient accents
-- Glass morphism effects
-- Responsive design for all devices
-- Smooth animations and transitions
-- Informative dashboard with statistics
 
 ---
 
