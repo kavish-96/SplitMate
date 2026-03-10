@@ -19,7 +19,6 @@ A full-stack expense splitting application built with **Angular** and **ASP.NET 
 - [API Documentation](#api-documentation)
 - [Key Algorithms](#key-algorithms)
 - [Learning Outcomes](#learning-outcomes)
-- [Future Enhancements](#future-enhancements)
 - [Troubleshooting](#troubleshooting)
 
 ---
@@ -42,14 +41,12 @@ This distribution demonstrates full-stack development skills while emphasizing f
 - Create and manage multiple expense groups
 - Add and remove members dynamically
 - View all groups in an intuitive dashboard
-- Real-time statistics (total groups, members, expenses)
 
 ### 💵 Expense Tracking
 - Add expenses with custom split amounts
 - Specify individual contributions (who paid how much)
 - View detailed expense breakdowns
 - Delete expenses with automatic recalculation
-- Expandable expense cards showing participants and shares
 
 ### ⚖️ Balance Calculation
 - Automatic calculation of member balances
@@ -62,7 +59,6 @@ This distribution demonstrates full-stack development skills while emphasizing f
 - Shows who owes whom and exact amounts
 - Mark settlements as complete
 - Settlement history tracking
-- Automatic balance adjustment after settlements
 
 ### 🎨 Modern UI/UX
 - Clean, minimal design with gradient accents
@@ -196,20 +192,6 @@ Before you begin, ensure you have the following installed:
 
 ### Running the Application
 
-#### Option 1: Using PowerShell Scripts (Recommended)
-
-**Terminal 1 - Start Backend:**
-```powershell
-.\start-backend.ps1
-```
-
-**Terminal 2 - Start Frontend:**
-```powershell
-.\start-frontend.ps1
-```
-
-#### Option 2: Manual Start
-
 **Terminal 1 - Start Backend:**
 ```bash
 cd SplitMateAPI
@@ -317,31 +299,6 @@ You should see the SplitMate dashboard with statistics and group management feat
 
 ## 🧮 Key Algorithms
 
-### Balance Calculation Algorithm
-
-```
-1. Initialize balance for each member:
-   - totalPaid = 0
-   - totalOwed = 0
-   - netBalance = 0
-
-2. For each expense:
-   a. Add contributions to totalPaid
-      (from contributionMap)
-   
-   b. Calculate share per person:
-      share = expense.amount / participants.length
-   
-   c. Add share to totalOwed for each participant
-
-3. Calculate net balance:
-   netBalance = totalPaid - totalOwed
-
-4. Adjust for completed settlements:
-   - Payer: netBalance += settlement.amount
-   - Receiver: netBalance -= settlement.amount
-```
-
 ### Settlement Optimization Algorithm
 
 ```
@@ -379,194 +336,6 @@ Optimized Settlements:
 
 Total: 2 transactions (instead of potentially more)
 ```
-
----
-
-## 📚 Learning Outcomes
-
-### ASP.NET Core Concepts
-
-✅ **Web API Development**
-- RESTful API design principles
-- HTTP methods and status codes
-- Route attributes and URL patterns
-
-✅ **Dependency Injection**
-- Service registration (Singleton pattern)
-- Constructor injection
-- Service lifetime management
-
-✅ **Service Layer Architecture**
-- Separation of concerns
-- Business logic isolation
-- Controller-Service pattern
-
-✅ **CORS Configuration**
-- Cross-origin resource sharing
-- Policy-based configuration
-- Security considerations
-
-✅ **Model Binding**
-- Request body deserialization
-- Route parameters
-- Query string parameters
-
-### Angular Concepts
-
-✅ **Component Architecture**
-- Standalone components
-- Component lifecycle hooks
-- Component communication
-
-✅ **Services & Dependency Injection**
-- Injectable services
-- Singleton services
-- Service hierarchy
-
-✅ **HTTP Client & Observables**
-- HttpClient module
-- RxJS operators
-- Async data handling
-- Error handling
-
-✅ **Routing & Navigation**
-- Route configuration
-- Route parameters
-- Programmatic navigation
-- Router outlet
-
-✅ **Forms & Data Binding**
-- Two-way data binding
-- Template-driven forms
-- Event handling
-- Form validation
-
-✅ **State Management**
-- BehaviorSubject for state
-- Observable subscriptions
-- Data synchronization
-
-### Full-Stack Integration
-
-✅ **Frontend-Backend Communication**
-- RESTful API consumption
-- HTTP request/response cycle
-- JSON data exchange
-
-✅ **CORS Handling**
-- Cross-origin requests
-- Preflight requests
-- Security headers
-
-✅ **Error Handling**
-- HTTP error responses
-- User-friendly error messages
-- Graceful degradation
-
-✅ **Async Operations**
-- Promise vs Observable
-- Async/await patterns
-- Loading states
-
----
-
-## 🎓 Usage Guide
-
-### Creating Your First Group
-
-1. **Navigate to Dashboard**
-   - Click "Create Group" button
-   - Enter group name (e.g., "Weekend Trip")
-   - Click "Create"
-
-2. **Add Members**
-   - Open the group
-   - Click "Add Member"
-   - Enter member names one by one
-   - Minimum 2 members required for expenses
-
-3. **Add an Expense**
-   - Go to "Expenses" tab
-   - Click "Add Expense"
-   - Fill in details:
-     - Title: "Hotel Booking"
-     - Amount: 5000
-     - Select participants
-     - Enter contributions (who paid how much)
-   - Click "Add Expense"
-
-4. **View Balances**
-   - Go to "Balances" tab
-   - See who paid what and who owes what
-   - Green = should receive money
-   - Red = should pay money
-
-5. **Settle Up**
-   - Go to "Settlements" tab
-   - See optimized transactions
-   - Click "Settle Up" to mark as paid
-   - Balance automatically updates
-
----
-
-## 🔮 Future Enhancements
-
-### Backend Improvements
-- [ ] **Database Integration**
-  - SQL Server or PostgreSQL
-  - Entity Framework Core
-  - Data persistence across restarts
-
-- [ ] **Authentication & Authorization**
-  - JWT token-based auth
-  - User registration and login
-  - Role-based access control
-
-- [ ] **Advanced Features**
-  - Data validation attributes
-  - Logging and monitoring
-  - Unit and integration tests
-  - API versioning
-
-### Frontend Improvements
-- [ ] **State Management**
-  - NgRx for complex state
-  - Redux DevTools integration
-  - Optimistic updates
-
-- [ ] **UI/UX Enhancements**
-  - Loading indicators
-  - Toast notifications
-  - Skeleton screens
-  - Dark mode support
-
-- [ ] **Testing**
-  - Unit tests (Jasmine/Karma)
-  - E2E tests (Cypress)
-  - Component testing
-
-### Feature Additions
-- [ ] **User Management**
-  - User profiles
-  - Multi-user support
-  - Group invitations
-
-- [ ] **Export & Reports**
-  - PDF expense reports
-  - CSV data export
-  - Email summaries
-
-- [ ] **Advanced Functionality**
-  - Receipt upload and OCR
-  - Multi-currency support
-  - Expense categories
-  - Recurring expenses
-  - Budget tracking
-
-- [ ] **Notifications**
-  - Email notifications
-  - Push notifications
-  - Settlement reminders
 
 ---
 
@@ -656,78 +425,16 @@ npm install typescript@latest
 
 ---
 
-## 📝 Development Notes
-
-### Port Configuration
-- **Backend API**: http://localhost:5024
-- **Frontend App**: http://localhost:4200
-- **CORS**: Configured for ports 4200, 4201, 4202
-
-### Data Persistence
-- **Current**: In-memory storage
-- **Behavior**: Data lost when API stops
-- **Future**: Database integration planned
-
-### Code Style
-- **Backend**: C# conventions, PascalCase
-- **Frontend**: TypeScript conventions, camelCase
-- **Formatting**: Consistent indentation and spacing
-
-### Git Workflow
-```bash
-# Create feature branch
-git checkout -b feature/your-feature
-
-# Commit changes
-git add .
-git commit -m "Add: your feature description"
-
-# Push to remote
-git push origin feature/your-feature
-```
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
----
-
 ## 📄 License
 
 This project is created for educational purposes as part of a .NET and Angular course curriculum.
 
 ---
 
-## 👥 Authors
-
-- **Your Name** - Initial work and development
-
----
-
 ## 🙏 Acknowledgments
 
 - Inspired by Splitwise
-- Built with Angular and ASP.NET Core
-- Uses modern web development practices
-- Demonstrates full-stack development skills
 
 ---
 
-## 📞 Support
-
-For issues, questions, or suggestions:
-- Open an issue on GitHub
-- Contact the development team
-- Check the troubleshooting section
-
----
-
-**Made with ❤️ using Angular and ASP.NET Core**
+**Made with ❤️ using Angular and ASP.NET Core by Kavish**
