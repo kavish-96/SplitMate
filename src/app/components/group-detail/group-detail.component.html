@@ -1,0 +1,325 @@
+<div class="container" *ngIf="group">
+  <!-- Group Header -->
+  <div class="group-header">
+    <button class="back-button" (click)="goBack()">
+      <span>←</span>
+      <span>Back to Groups</span>
+    </button>
+    <div class="group-title">
+      <h2>{{ group.groupName }}</h2>
+    </div>
+  </div>
+
+  <!-- Members Section -->
+  <div class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">
+        <span class="section-icon">👥</span>
+        Members
+      </h3>
+      <button class="btn btn-primary" (click)="toggleAddMember()">
+        <span style="margin-right: 8px;">{{ showAddMember ? '✕' : '➕' }}</span>
+        {{ showAddMember ? 'Cancel' : 'Add Member' }}
+      </button>
+    </div>
+
+    <div *ngIf="showAddMember" class="add-member-form">
+      <div style="font-size: 32px; margin-bottom: 16px;">👤</div>
+      <input 
+        type="text" 
+        [(ngModel)]="newMemberName" 
+        placeholder="Enter member name"
+        (keyup.enter)="addMember()"
+      />
+      <button class="btn btn-primary" (click)="addMember()">
+        <span style="margin-right: 8px;">✨</span>
+        Add Member
+      </button>
+    </div>
+
+    <div class="member-list" *ngIf="group.members.length > 0">
+      <div *ngFor="let member of group.members; let i = index" class="member-chip">
+        <div class="member-avatar">{{ getInitials(member) }}</div>
+        <span>{{ member }}</span>
+        <button (click)="removeMember(member)" title="Remove member">×</button>
+      </div>
+    </div>
+
+    <div *ngIf="group.members.length === 0" class="empty-state">
+      <div class="empty-icon">👥</div>
+      <h4 class="empty-title">No Members Yet</h4>
+      <p class="empty-subtitle">Add members to start tracking expenses together</p>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button 
+      class="tab" 
+      [class.active]="activeTab === 'expenses'"
+      (click)="setActiveTab('expenses')"
+    >
+      💵 Expenses
+    </button>
+    <button 
+      class="tab" 
+      [class.active]="activeTab === 'balances'"
+      (click)="setActiveTab('balances')"
+    >
+      ⚖️ Balances
+    </button>
+    <button 
+      class="tab" 
+      [class.active]="activeTab === 'settlements'"
+      (click)="setActiveTab('settlements')"
+    >
+      🤝 Settlements
+    </button>
+  </div>
+
+  <!-- Expenses Tab -->
+  <div *ngIf="activeTab === 'expenses'" class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">
+        <span class="section-icon">💵</span>
+        Expenses
+      </h3>
+      <button 
+        class="btn btn-primary" 
+        (click)="toggleAddExpense()"
+        [disabled]="group.members.length < 2"
+      >
+        <span style="margin-right: 8px;">{{ showAddExpense ? '✕' : '➕' }}</span>
+        {{ showAddExpense ? 'Cancel' : 'Add Expense' }}
+      </button>
+    </div>
+
+    <div *ngIf="showAddExpense" class="add-member-form">
+      <div style="font-size: 32px; margin-bottom: 16px;">💰</div>
+      <h3 style="margin: 0 0 20px 0; color: #333;">Add New Expense</h3>
+      
+      <div class="form-group">
+        <label>💡 Title</label>
+        <input type="text" [(ngModel)]="newExpense.title" placeholder="e.g., Dinner at restaurant, Movie tickets" />
+      </div>
+
+      <div class="form-group">
+        <label>📝 Remark (optional)</label>
+        <input type="text" [(ngModel)]="newExpense.remark" placeholder="Additional notes or details" />
+      </div>
+
+      <div class="form-group">
+        <label>💰 Amount (₹)</label>
+        <input type="number" [(ngModel)]="newExpense.amount" placeholder="0" />
+      </div>
+
+      <div class="form-group">
+        <label>👥 Select Participants</label>
+        <div class="participant-selector">
+          <label 
+            *ngFor="let member of group.members"
+            class="participant-checkbox"
+            [class.selected]="isParticipant(member)"
+          >
+            <input 
+              type="checkbox" 
+              [checked]="isParticipant(member)"
+              (change)="toggleParticipant(member)"
+            />
+            <span>{{ member }}</span>
+          </label>
+        </div>
+      </div>
+
+      <div *ngIf="newExpense.splitAmong.length > 0" class="contribution-inputs">
+        <label style="display: block; text-align: center; margin-bottom: 16px;">
+          💳 Who paid how much?
+        </label>
+        <div *ngFor="let member of newExpense.splitAmong" class="contribution-item">
+          <label>
+            <div class="contributor-avatar">{{ getInitials(member) }}</div>
+            {{ member }}
+          </label>
+          <input 
+            type="number" 
+            [(ngModel)]="newExpense.contributionMap[member]"
+            placeholder="0"
+          />
+        </div>
+      </div>
+
+      <button class="btn btn-primary" (click)="addExpense()" style="margin-top: 16px;">
+        <span style="margin-right: 8px;">🚀</span>
+        Add Expense
+      </button>
+    </div>
+
+    <ul class="expense-list" *ngIf="group.expenses.length > 0">
+      <li *ngFor="let expense of group.expenses; let i = index" class="expense-item">
+        <div class="expense-header" (click)="toggleExpenseDetails(expense.expenseId)">
+          <div class="expense-info">
+            <h4>
+              {{ expense.title }}
+              <span class="expand-icon" [class.expanded]="isExpenseExpanded(expense.expenseId)">
+                {{ isExpenseExpanded(expense.expenseId) ? '▼' : '▶' }}
+              </span>
+            </h4>
+            <p *ngIf="expense.remark">📝 {{ expense.remark }}</p>
+            <div class="expense-meta">
+              <div class="meta-item">
+                <span>📅</span>
+                <span>{{ formatDate(expense.timestamp) }}</span>
+              </div>
+              <div class="meta-item">
+                <span>👥</span>
+                <span>{{ expense.splitAmong.length }} participants</span>
+              </div>
+            </div>
+          </div>
+          <div class="expense-amount">
+            <div class="amount">₹{{ expense.amount }}</div>
+          </div>
+        </div>
+        
+        <!-- Expense Details (Expandable) -->
+        <div class="expense-details" *ngIf="isExpenseExpanded(expense.expenseId)">
+          <div class="detail-section">
+            <h5>👥 Participants</h5>
+            <div class="participants-list">
+              <span *ngFor="let participant of expense.splitAmong" class="participant-tag">
+                <span class="participant-avatar">{{ getInitials(participant) }}</span>
+                {{ participant }}
+              </span>
+            </div>
+            <p class="share-info">💡 Share per person: ₹{{ getSharePerPerson(expense) | number:'1.2-2' }}</p>
+          </div>
+
+          <div class="detail-section">
+            <h5>💳 Contributions</h5>
+            <div class="contributions-list">
+              <div *ngFor="let participant of expense.splitAmong" class="contribution-row">
+                <span class="contributor-name">
+                  <span class="contributor-avatar">{{ getInitials(participant) }}</span>
+                  {{ participant }}
+                </span>
+                <span class="contribution-amount">₹{{ getContributionAmount(expense, participant) | number:'1.2-2' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-actions">
+            <button class="btn btn-danger btn-small" (click)="deleteExpense(expense.expenseId); $event.stopPropagation()">
+              🗑️ Delete
+            </button>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <div *ngIf="group.expenses.length === 0" class="empty-state">
+      <div class="empty-icon">💵</div>
+      <h4 class="empty-title">No Expenses Yet</h4>
+      <p class="empty-subtitle">Add your first expense to start tracking</p>
+    </div>
+  </div>
+
+  <!-- Balances Tab -->
+  <div *ngIf="activeTab === 'balances'" class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">
+        <span class="section-icon">⚖️</span>
+        Member Balances
+      </h3>
+    </div>
+    
+    <ul class="balance-list" *ngIf="balances.length > 0">
+      <li *ngFor="let balance of balances" class="balance-item">
+        <div class="balance-info">
+          <div class="balance-avatar">{{ getInitials(balance.member) }}</div>
+          <div class="balance-details">
+            <h4>{{ balance.member }}</h4>
+            <div class="balance-meta">
+              <span>💰 Paid: ₹{{ balance.totalPaid.toFixed(2) }}</span>
+              <span>📊 Owes: ₹{{ balance.totalOwed.toFixed(2) }}</span>
+            </div>
+          </div>
+        </div>
+        <div 
+          class="balance-amount"
+          [class.positive]="balance.netBalance > 0"
+          [class.negative]="balance.netBalance < 0"
+        >
+          {{ balance.netBalance > 0 ? '+' : '' }}₹{{ balance.netBalance.toFixed(2) }}
+        </div>
+      </li>
+    </ul>
+
+    <div *ngIf="balances.length === 0" class="empty-state">
+      <div class="empty-icon">⚖️</div>
+      <h4 class="empty-title">No Balances Yet</h4>
+      <p class="empty-subtitle">Add expenses to see member balances</p>
+    </div>
+  </div>
+
+  <!-- Settlements Tab -->
+  <div *ngIf="activeTab === 'settlements'" class="section-card">
+    <div class="section-header">
+      <h3 class="section-title">
+        <span class="section-icon">🤝</span>
+        Who Owes Whom
+      </h3>
+    </div>
+    
+    <ul class="settlement-list" *ngIf="settlements.length > 0">
+      <li *ngFor="let settlement of settlements" class="settlement-item">
+        <div class="settlement-info">
+          <div class="settlement-avatars">
+            <div class="settlement-avatar">{{ getInitials(settlement.from) }}</div>
+            <span class="settlement-arrow">→</span>
+            <div class="settlement-avatar">{{ getInitials(settlement.to) }}</div>
+          </div>
+          <div class="settlement-details">
+            <h4>{{ settlement.from }} → {{ settlement.to }}</h4>
+            <div class="settlement-amount">₹{{ settlement.amount }}</div>
+          </div>
+        </div>
+        <button class="btn btn-primary" (click)="settleUp(settlement)">
+          <span style="margin-right: 8px;">✅</span>
+          Settle Up
+        </button>
+      </li>
+    </ul>
+
+    <div *ngIf="settlements.length === 0" class="empty-state">
+      <div class="empty-icon">🎉</div>
+      <h4 class="empty-title">All Settled Up!</h4>
+      <p class="empty-subtitle">Everyone is even - no pending settlements</p>
+    </div>
+
+    <div *ngIf="group.settlements.length > 0" style="margin-top: 40px;">
+      <div class="section-header">
+        <h3 class="section-title">
+          <span class="section-icon">📜</span>
+          Settlement History
+        </h3>
+      </div>
+      <ul class="settlement-list">
+        <li *ngFor="let settlement of group.settlements" class="settlement-item">
+          <div class="settlement-info">
+            <div class="settlement-avatars">
+              <div class="settlement-avatar">{{ getInitials(settlement.from) }}</div>
+              <span class="settlement-arrow">→</span>
+              <div class="settlement-avatar">{{ getInitials(settlement.to) }}</div>
+            </div>
+            <div class="settlement-details">
+              <h4>{{ settlement.from }} → {{ settlement.to }}</h4>
+              <div class="settlement-amount">₹{{ settlement.amount }}</div>
+              <div class="settlement-date">{{ formatDate(settlement.timestamp) }}</div>
+            </div>
+          </div>
+          <span style="color: #5bc5a7; font-size: 24px;">✅</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,120 @@
+<div class="container">
+  <!-- Enhanced Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <div class="brand-section">
+        <div class="brand-icon">💰</div>
+        <div class="brand-info">
+          <h1 class="dashboard-title">SplitMate</h1>
+          <p class="dashboard-subtitle">Track, Split, and Settle Shared Expenses</p>
+        </div>
+      </div>
+      <div class="header-stats">
+        <div class="stat-card">
+          <div class="stat-value">{{ groups.length }}</div>
+          <div class="stat-label">Total Groups</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">{{ getTotalMembers() }}</div>
+          <div class="stat-label">Total Members</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">{{ getTotalExpenses() }}</div>
+          <div class="stat-label">Total Expenses</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+      <h2 style="margin: 0; display: flex; align-items: center; gap: 12px;">
+        <span style="font-size: 24px;">👥</span>
+        Your Groups
+      </h2>
+      <button class="btn btn-primary" (click)="toggleCreateForm()">
+        <span style="margin-right: 8px;">{{ showCreateForm ? '✕' : '➕' }}</span>
+        {{ showCreateForm ? 'Cancel' : 'Create Group' }}
+      </button>
+    </div>
+
+    <div *ngIf="showCreateForm" class="create-section">
+      <div class="create-icon">🎯</div>
+      <h3 style="margin: 0 0 20px 0; color: #333;">Create New Group</h3>
+      <div class="form-group" style="max-width: 400px; margin: 0 auto;">
+        <input 
+          type="text" 
+          [(ngModel)]="newGroupName" 
+          placeholder="e.g., Goa Trip, Flat Expenses, Office Lunch"
+          (keyup.enter)="createGroup()"
+          style="text-align: center; font-size: 16px;"
+        />
+      </div>
+      <button class="btn btn-primary" (click)="createGroup()" style="margin-top: 10px;">
+        <span style="margin-right: 8px;">🚀</span>
+        Create Group
+      </button>
+    </div>
+
+    <div *ngIf="groups.length === 0 && !showCreateForm" class="empty-state">
+      <div class="empty-icon">📊</div>
+      <h3 class="empty-title">No Groups Yet</h3>
+      <p class="empty-subtitle">Create your first group to start tracking shared expenses</p>
+      <button class="btn btn-primary" (click)="toggleCreateForm()">
+        <span style="margin-right: 8px;">➕</span>
+        Get Started
+      </button>
+    </div>
+
+    <div class="group-grid" *ngIf="groups.length > 0">
+      <div 
+        *ngFor="let group of groups; let i = index" 
+        class="group-card"
+        (click)="openGroup(group.groupId)"
+      >
+        <div class="group-header">
+          <div class="group-title">
+            <h3>{{ group.groupName }}</h3>
+          </div>
+          <button 
+            class="btn-icon" 
+            (click)="deleteGroup(group.groupId, $event)"
+            title="Delete group"
+          >
+            🗑️
+          </button>
+        </div>
+        
+        <div class="group-stats">
+          <div class="stat-item">
+            <span class="stat-icon">👥</span>
+            <span>{{ group.members.length }} {{ group.members.length === 1 ? 'member' : 'members' }}</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-icon">💵</span>
+            <span>{{ group.expenses.length }} {{ group.expenses.length === 1 ? 'expense' : 'expenses' }}</span>
+          </div>
+        </div>
+
+        <div class="group-footer">
+          <div class="group-status" [class]="getGroupStatus(group)">
+            {{ getGroupStatusText(group) }}
+          </div>
+          <div class="open-arrow">→</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="dashboard-footer">
+    <div class="footer-content">
+      <div class="footer-text">
+        <p>💡 <strong>Tip:</strong> Split expenses fairly and settle up easily with optimized transactions</p>
+      </div>
+      <div class="footer-info">
+        <span>Built with Angular & ASP.NET Core</span>
+      </div>
+    </div>
+  </div>
+</div>
