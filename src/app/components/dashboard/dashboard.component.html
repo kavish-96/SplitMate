@@ -1,83 +1,94 @@
-<div class="container">
+<div class="container py-5">
   <!-- Enhanced Header -->
-  <div class="dashboard-header">
-    <div class="header-content">
-      <div class="brand-section">
-        <div class="brand-icon">💰</div>
-        <div class="brand-info">
-          <h1 class="dashboard-title">SplitMate</h1>
-          <p class="dashboard-subtitle">Track, Split, and Settle Shared Expenses</p>
+  <div class="bg-white/98 backdrop-blur-md rounded-3xl p-8 mb-8 border border-gray-100 shadow-lg">
+    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
+      <!-- Brand Section -->
+      <div class="flex items-center gap-5">
+        <div class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-primary/30">
+          💰
+        </div>
+        <div class="flex flex-col gap-1">
+          <h1 class="text-4xl font-bold m-0 gradient-text">SplitMate</h1>
+          <p class="text-gray-600 text-base m-0 font-medium">Track, Split, and Settle Shared Expenses</p>
         </div>
       </div>
-      <div class="header-stats">
-        <div class="stat-card">
-          <div class="stat-value">{{ groups.length }}</div>
-          <div class="stat-label">Total Groups</div>
+
+      <!-- Statistics Cards -->
+      <div class="flex gap-5 w-full lg:w-auto">
+        <div class="flex-1 lg:flex-none bg-gradient-to-br from-primary/8 to-secondary/8 border border-primary/15 rounded-2xl p-5 text-center min-w-[120px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:shadow-primary/15">
+          <div class="text-4xl font-bold gradient-text leading-none mb-2">{{ groups.length }}</div>
+          <div class="text-xs text-gray-600 font-medium uppercase tracking-wider">Total Groups</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-value">{{ getTotalMembers() }}</div>
-          <div class="stat-label">Total Members</div>
+        <div class="flex-1 lg:flex-none bg-gradient-to-br from-primary/8 to-secondary/8 border border-primary/15 rounded-2xl p-5 text-center min-w-[120px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:shadow-primary/15">
+          <div class="text-4xl font-bold gradient-text leading-none mb-2">{{ getTotalMembers() }}</div>
+          <div class="text-xs text-gray-600 font-medium uppercase tracking-wider">Total Members</div>
         </div>
-        <div class="stat-card">
-          <div class="stat-value">{{ getTotalExpenses() }}</div>
-          <div class="stat-label">Total Expenses</div>
+        <div class="flex-1 lg:flex-none bg-gradient-to-br from-primary/8 to-secondary/8 border border-primary/15 rounded-2xl p-5 text-center min-w-[120px] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:shadow-primary/15">
+          <div class="text-4xl font-bold gradient-text leading-none mb-2">{{ getTotalExpenses() }}</div>
+          <div class="text-xs text-gray-600 font-medium uppercase tracking-wider">Total Expenses</div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Main Card -->
   <div class="card">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-      <h2 style="margin: 0; display: flex; align-items: center; gap: 12px;">
-        <span style="font-size: 24px;">👥</span>
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="m-0 flex items-center gap-3 text-2xl font-semibold">
+        <span class="text-2xl">👥</span>
         Your Groups
       </h2>
       <button class="btn btn-primary" (click)="toggleCreateForm()">
-        <span style="margin-right: 8px;">{{ showCreateForm ? '✕' : '➕' }}</span>
+        <span class="mr-2">{{ showCreateForm ? '✕' : '➕' }}</span>
         {{ showCreateForm ? 'Cancel' : 'Create Group' }}
       </button>
     </div>
 
-    <div *ngIf="showCreateForm" class="create-section">
-      <div class="create-icon">🎯</div>
-      <h3 style="margin: 0 0 20px 0; color: #333;">Create New Group</h3>
-      <div class="form-group" style="max-width: 400px; margin: 0 auto;">
+    <!-- Create Form -->
+    <div *ngIf="showCreateForm" class="bg-gradient-to-br from-primary/3 to-secondary/3 border-2 border-dashed border-primary/20 rounded-2xl p-8 text-center mb-10 transition-all duration-300 hover:border-primary/30 hover:from-primary/5 hover:to-secondary/5">
+      <div class="text-5xl mb-4 opacity-70">🎯</div>
+      <h3 class="m-0 mb-5 text-gray-800 text-xl font-semibold">Create New Group</h3>
+      <div class="form-group max-w-md mx-auto">
         <input 
           type="text" 
           [(ngModel)]="newGroupName" 
           placeholder="e.g., Goa Trip, Flat Expenses, Office Lunch"
           (keyup.enter)="createGroup()"
-          style="text-align: center; font-size: 16px;"
+          class="text-center text-base"
         />
       </div>
-      <button class="btn btn-primary" (click)="createGroup()" style="margin-top: 10px;">
-        <span style="margin-right: 8px;">🚀</span>
+      <button class="btn btn-primary mt-2.5" (click)="createGroup()">
+        <span class="mr-2">🚀</span>
         Create Group
       </button>
     </div>
 
-    <div *ngIf="groups.length === 0 && !showCreateForm" class="empty-state">
-      <div class="empty-icon">📊</div>
-      <h3 class="empty-title">No Groups Yet</h3>
-      <p class="empty-subtitle">Create your first group to start tracking shared expenses</p>
+    <!-- Empty State -->
+    <div *ngIf="groups.length === 0 && !showCreateForm" class="text-center py-16 px-5 bg-white/80 rounded-2xl border border-gray-100">
+      <div class="text-6xl mb-5 opacity-60">📊</div>
+      <h3 class="text-xl font-semibold text-gray-800 mb-2">No Groups Yet</h3>
+      <p class="text-gray-600 text-base mb-6">Create your first group to start tracking shared expenses</p>
       <button class="btn btn-primary" (click)="toggleCreateForm()">
-        <span style="margin-right: 8px;">➕</span>
+        <span class="mr-2">➕</span>
         Get Started
       </button>
     </div>
 
-    <div class="group-grid" *ngIf="groups.length > 0">
+    <!-- Groups Grid -->
+    <div *ngIf="groups.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
       <div 
         *ngFor="let group of groups; let i = index" 
-        class="group-card"
+        class="bg-white/98 backdrop-blur-md border border-gray-200 rounded-2xl p-6 cursor-pointer transition-all duration-300 relative overflow-hidden hover:-translate-y-1 hover:shadow-xl hover:border-primary/20 before:absolute before:top-0 before:left-0 before:right-0 before:h-1 before:bg-gradient-to-r before:from-primary before:to-secondary before:scale-x-0 before:transition-transform before:duration-300 hover:before:scale-x-100"
         (click)="openGroup(group.groupId)"
       >
-        <div class="group-header">
-          <div class="group-title">
-            <h3>{{ group.groupName }}</h3>
+        <!-- Header -->
+        <div class="flex justify-between items-start mb-5">
+          <div class="flex-1">
+            <h3 class="m-0 text-gray-800 text-xl font-semibold leading-tight">{{ group.groupName }}</h3>
           </div>
           <button 
-            class="btn-icon" 
+            class="bg-red-500/10 border-0 text-lg cursor-pointer p-2 w-9 h-9 rounded-xl flex items-center justify-center text-red-600 transition-all duration-300 opacity-70 hover:bg-red-500/20 hover:opacity-100 hover:scale-110"
             (click)="deleteGroup(group.groupId, $event)"
             title="Delete group"
           >
@@ -85,35 +96,45 @@
           </button>
         </div>
         
-        <div class="group-stats">
-          <div class="stat-item">
-            <span class="stat-icon">👥</span>
+        <!-- Stats -->
+        <div class="flex gap-5 mb-4">
+          <div class="flex items-center gap-2 text-gray-600 text-sm">
+            <span class="text-base opacity-80">👥</span>
             <span>{{ group.members.length }} {{ group.members.length === 1 ? 'member' : 'members' }}</span>
           </div>
-          <div class="stat-item">
-            <span class="stat-icon">💵</span>
+          <div class="flex items-center gap-2 text-gray-600 text-sm">
+            <span class="text-base opacity-80">💵</span>
             <span>{{ group.expenses.length }} {{ group.expenses.length === 1 ? 'expense' : 'expenses' }}</span>
           </div>
         </div>
 
-        <div class="group-footer">
-          <div class="group-status" [class]="getGroupStatus(group)">
+        <!-- Footer -->
+        <div class="flex justify-between items-center pt-4 border-t border-gray-100">
+          <div 
+            class="text-xs py-1 px-2 rounded-lg font-medium uppercase tracking-wider"
+            [ngClass]="{
+              'bg-primary/10 text-primary': getGroupStatus(group) === 'status-active',
+              'bg-gray-500/10 text-gray-600': getGroupStatus(group) === 'status-empty'
+            }"
+          >
             {{ getGroupStatusText(group) }}
           </div>
-          <div class="open-arrow">→</div>
+          <div class="text-lg text-primary opacity-70 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-1">→</div>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Footer -->
-  <div class="dashboard-footer">
-    <div class="footer-content">
-      <div class="footer-text">
-        <p>💡 <strong>Tip:</strong> Split expenses fairly and settle up easily with optimized transactions</p>
+  <div class="bg-white/95 backdrop-blur-md rounded-2xl p-6 mt-8 border border-gray-100">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-5">
+      <div class="flex-1 text-center md:text-left">
+        <p class="m-0 text-gray-600 text-sm leading-relaxed">
+          💡 <strong class="text-primary font-semibold">Tip:</strong> Split expenses fairly and settle up easily with optimized transactions
+        </p>
       </div>
-      <div class="footer-info">
-        <span>Built with Angular & ASP.NET Core</span>
+      <div class="text-sm text-gray-500 font-medium py-2 px-4 bg-primary/5 rounded-lg border border-primary/10">
+        Built with Angular & ASP.NET Core
       </div>
     </div>
   </div>

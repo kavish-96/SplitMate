@@ -30,3 +30,4 @@ D:\IPE, PROJECT SEM_5\DOTNET IP\SplitMate\SplitMateAPI\obj\Debug\net9.0\refint\S
 D:\IPE, PROJECT SEM_5\DOTNET IP\SplitMate\SplitMateAPI\obj\Debug\net9.0\SplitMateAPI.pdb
 D:\IPE, PROJECT SEM_5\DOTNET IP\SplitMate\SplitMateAPI\obj\Debug\net9.0\SplitMateAPI.genruntimeconfig.cache
 D:\IPE, PROJECT SEM_5\DOTNET IP\SplitMate\SplitMateAPI\obj\Debug\net9.0\ref\SplitMateAPI.dll
+D:\IPE, PROJECT SEM_5\DOTNET IP\SplitMate\SplitMateAPI\obj\Debug\net9.0\SplitMateAPI.sourcelink.json

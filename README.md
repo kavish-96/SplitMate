@@ -5,6 +5,7 @@ A full-stack expense splitting application built with **Angular** and **ASP.NET 
 [![Angular](https://img.shields.io/badge/Angular-19-red?logo=angular)](https://angular.io/)
 [![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-9.0-blue?logo=.net)](https://dotnet.microsoft.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
 [![C#](https://img.shields.io/badge/C%23-12-purple?logo=csharp)](https://docs.microsoft.com/en-us/dotnet/csharp/)
 
 ---
@@ -61,10 +62,12 @@ SplitMate is a modern web application that simplifies the process of splitting e
 ### Frontend
 - **Angular 19** - Modern web framework
 - **TypeScript 5.0** - Type-safe JavaScript
+- **Tailwind CSS 3.4** - Utility-first CSS framework
 - **RxJS** - Reactive programming
 - **HttpClient** - API communication
 - **Standalone Components** - Latest Angular architecture
-- **CSS3** - Modern styling with gradients and animations
+
+**Note:** The project uses Tailwind CSS for all styling, providing a modern utility-first approach. See `TAILWIND_CONVERSION.md` for details on the conversion from traditional CSS.
 
 ### Backend
 - **ASP.NET Core 9.0** - Web API framework
