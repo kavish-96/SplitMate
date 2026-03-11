@@ -67,8 +67,6 @@ SplitMate is a modern web application that simplifies the process of splitting e
 - **HttpClient** - API communication
 - **Standalone Components** - Latest Angular architecture
 
-**Note:** The project uses Tailwind CSS for all styling, providing a modern utility-first approach. See `TAILWIND_CONVERSION.md` for details on the conversion from traditional CSS.
-
 ### Backend
 - **ASP.NET Core 9.0** - Web API framework
 - **C# 12** - Modern programming language
