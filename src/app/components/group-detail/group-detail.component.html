@@ -1,367 +1,418 @@
-<div class="container py-5" *ngIf="group">
-  <!-- Group Header -->
-  <div class="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl p-6 mb-8 border border-primary/10">
+<div class="container py-8" *ngIf="group">
+  <!-- Back Button & Header -->
+  <div class="mb-6">
     <button 
-      class="inline-flex items-center gap-2 py-2 px-4 bg-white/80 border border-gray-200 rounded-xl text-gray-600 no-underline text-sm transition-all duration-300 hover:bg-white hover:text-gray-800 hover:-translate-x-0.5 mb-4"
+      class="inline-flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-xl text-gray-700 transition-all duration-300 hover:border-primary hover:text-primary hover:-translate-x-1 mb-4"
       (click)="goBack()"
     >
-      <span>←</span>
-      <span>Back to Groups</span>
+      <span class="text-lg">←</span>
+      <span class="font-medium">Back to Groups</span>
     </button>
-    <div class="flex items-center mb-4">
-      <h2 class="m-0 text-3xl font-bold text-gray-800">{{ group.groupName }}</h2>
+    
+    <div class="bg-gradient-to-r from-primary to-secondary text-white rounded-3xl p-8 shadow-xl">
+      <h1 class="text-3xl font-bold m-0 mb-2">{{ group.groupName }}</h1>
+      <p class="text-white/90 m-0">Manage members, track expenses, and settle balances</p>
     </div>
   </div>
 
-  <!-- Members Section -->
-  <div class="card">
-    <div class="flex justify-between items-center mb-5 pb-4 border-b-2 border-primary/10">
-      <h3 class="flex items-center gap-3 m-0 text-xl font-semibold text-gray-800">
+  <!-- Members Section - Horizontal Scroll Design -->
+  <div class="bg-white rounded-3xl p-6 mb-6 shadow-md border border-gray-200">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-xl font-bold text-gray-900 m-0 flex items-center gap-2">
         <span class="text-2xl">👥</span>
-        Members
+        <span>Members</span>
+        <span class="badge badge-primary">{{ group.members.length }}</span>
       </h3>
       <button class="btn btn-primary" (click)="toggleAddMember()">
-        <span class="mr-2">{{ showAddMember ? '✕' : '➕' }}</span>
-        {{ showAddMember ? 'Cancel' : 'Add Member' }}
+        <span class="text-lg">{{ showAddMember ? '✕' : '➕' }}</span>
+        <span>{{ showAddMember ? 'Cancel' : 'Add Member' }}</span>
       </button>
     </div>
 
-    <div *ngIf="showAddMember" class="bg-gradient-to-br from-primary/3 to-secondary/3 border-2 border-dashed border-primary/20 rounded-2xl p-6 mb-5 text-center">
-      <div class="text-4xl mb-4">👤</div>
-      <input 
-        type="text" 
-        [(ngModel)]="newMemberName" 
-        placeholder="Enter member name"
-        (keyup.enter)="addMember()"
-        class="max-w-xs mx-auto text-center"
-      />
-      <button class="btn btn-primary mt-0" (click)="addMember()">
-        <span class="mr-2">✨</span>
-        Add Member
-      </button>
-    </div>
-
-    <div class="flex flex-wrap gap-3 my-5" *ngIf="group.members.length > 0">
-      <div *ngFor="let member of group.members" class="flex items-center gap-2.5 py-2.5 px-4 bg-gradient-to-br from-primary/8 to-secondary/8 border border-primary/15 rounded-full text-sm font-medium text-gray-800 transition-all duration-300 hover:from-primary/12 hover:to-secondary/12 hover:-translate-y-0.5">
-        <div class="w-6 h-6 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white text-xs font-semibold">
-          {{ getInitials(member) }}
-        </div>
-        <span>{{ member }}</span>
-        <button 
-          class="bg-red-500/10 border-0 cursor-pointer text-sm text-red-600 p-0 w-5 h-5 rounded-full flex items-center justify-center transition-all duration-300 hover:bg-red-500/20 hover:scale-110"
-          (click)="removeMember(member)" 
-          title="Remove member"
-        >×</button>
+    <div *ngIf="showAddMember" class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-6 mb-4 border-2 border-dashed border-purple-300 animate-slide-up">
+      <div class="max-w-md mx-auto">
+        <div class="text-4xl text-center mb-3">👤</div>
+        <input 
+          type="text" 
+          [(ngModel)]="newMemberName" 
+          placeholder="Enter member name"
+          (keyup.enter)="addMember()"
+          class="text-center mb-2"
+        />
+        <button class="btn btn-secondary w-full" (click)="addMember()">
+          <span class="text-lg">✨</span>
+          <span>Add Member</span>
+        </button>
       </div>
     </div>
 
-    <div *ngIf="group.members.length === 0" class="text-center py-16 px-5 bg-white/80 rounded-2xl border border-gray-100">
-      <div class="text-5xl mb-4 opacity-60">👥</div>
-      <h4 class="text-lg font-semibold text-gray-800 mb-2">No Members Yet</h4>
-      <p class="text-gray-600 text-sm mb-0">Add members to start tracking expenses together</p>
+    <div class="flex overflow-x-auto gap-3 pb-2" *ngIf="group.members.length > 0">
+      <div *ngFor="let member of group.members" 
+           class="flex-shrink-0 bg-gradient-to-br rounded-2xl p-4 min-w-[140px] text-center shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-1 relative group"
+           [ngClass]="getMemberColorClass(member)">
+        <button 
+          class="absolute top-2 right-2 w-6 h-6 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white/30 hover:scale-110"
+          (click)="removeMember(member)" 
+          title="Remove member"
+        >×</button>
+        <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-2">
+          {{ getInitials(member) }}
+        </div>
+        <div class="text-white font-semibold text-sm">{{ member }}</div>
+      </div>
+    </div>
+
+    <div *ngIf="group.members.length === 0" class="text-center py-12">
+      <div class="text-5xl mb-3 opacity-40">👥</div>
+      <h4 class="text-lg font-bold text-gray-900 mb-1">No Members Yet</h4>
+      <p class="text-gray-600 text-sm">Add members to start tracking expenses</p>
     </div>
   </div>
 
-  <!-- Tabs -->
-  <div class="flex gap-1 mb-8 bg-white/90 p-1.5 rounded-2xl border border-gray-100">
+  <!-- Tabs - Pill Style -->
+  <div class="flex gap-2 mb-6 p-2 bg-white rounded-2xl shadow-md border border-gray-200">
     <button 
-      class="flex-1 py-3 px-5 bg-transparent border-0 cursor-pointer text-sm font-medium text-gray-600 rounded-xl transition-all duration-300 uppercase tracking-wide hover:text-primary hover:bg-primary/5"
-      [ngClass]="{'!text-white !bg-gradient-to-br !from-primary !to-primary-dark !shadow-lg !shadow-primary/30': activeTab === 'expenses'}"
+      class="flex-1 py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2"
+      [ngClass]="activeTab === 'expenses' ? 'bg-emerald-500 text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'"
       (click)="setActiveTab('expenses')"
     >
-      💵 Expenses
+      <span class="text-lg">💵</span>
+      <span>Expenses</span>
     </button>
     <button 
-      class="flex-1 py-3 px-5 bg-transparent border-0 cursor-pointer text-sm font-medium text-gray-600 rounded-xl transition-all duration-300 uppercase tracking-wide hover:text-primary hover:bg-primary/5"
-      [ngClass]="{'!text-white !bg-gradient-to-br !from-primary !to-primary-dark !shadow-lg !shadow-primary/30': activeTab === 'balances'}"
+      class="flex-1 py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2"
+      [ngClass]="activeTab === 'balances' ? 'bg-purple-500 text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'"
       (click)="setActiveTab('balances')"
     >
-      ⚖️ Balances
+      <span class="text-lg">⚖️</span>
+      <span>Balances</span>
     </button>
     <button 
-      class="flex-1 py-3 px-5 bg-transparent border-0 cursor-pointer text-sm font-medium text-gray-600 rounded-xl transition-all duration-300 uppercase tracking-wide hover:text-primary hover:bg-primary/5"
-      [ngClass]="{'!text-white !bg-gradient-to-br !from-primary !to-primary-dark !shadow-lg !shadow-primary/30': activeTab === 'settlements'}"
+      class="flex-1 py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2"
+      [ngClass]="activeTab === 'settlements' ? 'bg-blue-500 text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'"
       (click)="setActiveTab('settlements')"
     >
-      🤝 Settlements
+      <span class="text-lg">🤝</span>
+      <span>Settlements</span>
     </button>
   </div>
 
   <!-- Expenses Tab -->
-  <div *ngIf="activeTab === 'expenses'" class="card">
-    <div class="flex justify-between items-center mb-5 pb-4 border-b-2 border-primary/10">
-      <h3 class="flex items-center gap-3 m-0 text-xl font-semibold text-gray-800">
-        <span class="text-2xl">💵</span>
-        Expenses
-      </h3>
-      <button 
-        class="btn btn-primary" 
-        (click)="toggleAddExpense()"
-        [disabled]="group.members.length < 2"
-      >
-        <span class="mr-2">{{ showAddExpense ? '✕' : '➕' }}</span>
-        {{ showAddExpense ? 'Cancel' : 'Add Expense' }}
-      </button>
-    </div>
-
-    <div *ngIf="showAddExpense" class="bg-gradient-to-br from-primary/3 to-secondary/3 border-2 border-dashed border-primary/20 rounded-2xl p-6 mb-5 text-center">
-      <div class="text-4xl mb-4">💰</div>
-      <h3 class="m-0 mb-5 text-gray-800 text-xl font-semibold">Add New Expense</h3>
-      
-      <div class="form-group">
-        <label class="text-left">💡 Title</label>
-        <input type="text" [(ngModel)]="newExpense.title" placeholder="e.g., Dinner at restaurant, Movie tickets" />
-      </div>
-
-      <div class="form-group">
-        <label class="text-left">📝 Remark (optional)</label>
-        <input type="text" [(ngModel)]="newExpense.remark" placeholder="Additional notes or details" />
-      </div>
-
-      <div class="form-group">
-        <label class="text-left">💰 Amount (₹)</label>
-        <input type="number" [(ngModel)]="newExpense.amount" placeholder="0" />
-      </div>
-
-      <div class="form-group">
-        <label class="text-left">👥 Select Participants</label>
-        <div class="flex flex-wrap gap-3 my-4">
-          <label 
-            *ngFor="let member of group.members"
-            class="flex items-center gap-2 py-2.5 px-4 bg-white/80 border-2 border-gray-200 rounded-full cursor-pointer transition-all duration-300 text-sm font-medium hover:bg-white hover:border-primary/30"
-            [ngClass]="{'!bg-gradient-to-br !from-primary !to-primary-dark !text-white !border-primary !shadow-lg !shadow-primary/30': isParticipant(member)}"
-          >
-            <input 
-              type="checkbox" 
-              [checked]="isParticipant(member)"
-              (change)="toggleParticipant(member)"
-              class="w-auto m-0 accent-primary"
-            />
-            <span>{{ member }}</span>
-          </label>
-        </div>
-      </div>
-
-      <div *ngIf="newExpense.splitAmong.length > 0" class="mt-5 bg-gray-50/80 p-5 rounded-2xl border border-gray-100">
-        <label class="block text-center mb-4 text-base">
-          💳 Who paid how much?
-        </label>
-        <div *ngFor="let member of newExpense.splitAmong" class="flex items-center gap-3 mb-3 p-3 bg-white/80 rounded-xl border border-gray-100">
-          <label class="min-w-[120px] m-0 font-medium text-gray-800 flex items-center gap-2">
-            <div class="w-6 h-6 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white text-xs font-semibold">
-              {{ getInitials(member) }}
-            </div>
-            {{ member }}
-          </label>
-          <input 
-            type="number" 
-            [(ngModel)]="newExpense.contributionMap[member]"
-            placeholder="0"
-            class="flex-1 m-0"
-          />
-        </div>
-      </div>
-
-      <button class="btn btn-primary mt-4" (click)="addExpense()">
-        <span class="mr-2">🚀</span>
-        Add Expense
-      </button>
-    </div>
-
-    <ul class="list-none p-0" *ngIf="group.expenses.length > 0">
-      <li *ngFor="let expense of group.expenses; let i = index" class="border border-gray-100 rounded-2xl mb-4 overflow-hidden transition-all duration-300 bg-white/90 backdrop-blur-sm hover:shadow-lg hover:-translate-y-0.5 hover:border-primary/20">
-        <div 
-          class="flex justify-between items-center p-5 cursor-pointer bg-white/95 transition-all duration-300 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:bg-gradient-to-b before:from-primary before:to-secondary before:scale-y-0 before:transition-transform before:duration-300 hover:bg-white hover:before:scale-y-100"
-          (click)="toggleExpenseDetails(expense.expenseId)"
+  <div *ngIf="activeTab === 'expenses'">
+    <div class="card">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold text-gray-900 m-0 flex items-center gap-2">
+          <span class="text-2xl">💵</span>
+          <span>Expenses</span>
+        </h3>
+        <button 
+          class="btn btn-primary" 
+          (click)="toggleAddExpense()"
+          [disabled]="group.members.length < 2"
         >
-          <div class="flex-1">
-            <h4 class="m-0 mb-2 text-gray-800 text-lg font-semibold flex items-center gap-3">
-              {{ expense.title }}
-              <span 
-                class="text-xs text-primary transition-transform duration-300 bg-primary/10 py-1 px-1.5 rounded-md"
-                [ngClass]="{'rotate-90 bg-primary/20': isExpenseExpanded(expense.expenseId)}"
-              >
-                {{ isExpenseExpanded(expense.expenseId) ? '▼' : '▶' }}
-              </span>
-            </h4>
-            <p *ngIf="expense.remark" class="m-0 text-sm text-gray-600 mb-2">📝 {{ expense.remark }}</p>
-            <div class="flex gap-4 mt-2">
-              <div class="flex items-center gap-1 text-xs text-gray-500">
-                <span>📅</span>
-                <span>{{ formatDate(expense.timestamp) }}</span>
-              </div>
-              <div class="flex items-center gap-1 text-xs text-gray-500">
-                <span>👥</span>
-                <span>{{ expense.splitAmong.length }} participants</span>
-              </div>
-            </div>
-          </div>
-          <div class="text-right">
-            <div class="text-2xl font-bold gradient-text">₹{{ expense.amount }}</div>
-          </div>
-        </div>
+          <span class="text-lg">{{ showAddExpense ? '✕' : '➕' }}</span>
+          <span>{{ showAddExpense ? 'Cancel' : 'Add Expense' }}</span>
+        </button>
+      </div>
+
+      <div *ngIf="showAddExpense" class="bg-gradient-to-br from-emerald-50 to-blue-50 rounded-2xl p-6 mb-6 border-2 border-dashed border-emerald-300 animate-slide-up">
+        <div class="text-4xl text-center mb-4">💰</div>
+        <h3 class="text-xl font-bold text-gray-900 text-center mb-6">Add New Expense</h3>
         
-        <!-- Expense Details (Expandable) -->
-        <div *ngIf="isExpenseExpanded(expense.expenseId)" class="bg-gray-50/80 border-t border-gray-100 p-6">
-          <div class="mb-6">
-            <h5 class="m-0 mb-3 text-gray-800 text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
-              👥 Participants
-            </h5>
-            <div class="mb-2">
-              <span *ngFor="let participant of expense.splitAmong" class="inline-flex items-center gap-1.5 bg-gradient-to-br from-primary to-primary-dark text-white py-1.5 px-3 rounded-2xl text-xs font-medium mr-2 mb-2 shadow-md shadow-primary/30">
-                <span class="w-4 h-4 bg-white/20 rounded-full flex items-center justify-center text-[10px]">
-                  {{ getInitials(participant) }}
-                </span>
-                {{ participant }}
-              </span>
-            </div>
-            <p class="text-sm text-gray-600 italic bg-primary/5 py-2 px-3 rounded-lg border-l-4 border-primary m-0">
-              💡 Share per person: ₹{{ getSharePerPerson(expense) | number:'1.2-2' }}
-            </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div class="form-group">
+            <label>💡 Title</label>
+            <input type="text" [(ngModel)]="newExpense.title" placeholder="e.g., Dinner, Movie tickets" />
           </div>
 
-          <div class="mb-6">
-            <h5 class="m-0 mb-3 text-gray-800 text-sm font-semibold uppercase tracking-wider flex items-center gap-2">
-              💳 Contributions
-            </h5>
-            <div class="flex flex-col gap-2">
-              <div *ngFor="let participant of expense.splitAmong" class="flex justify-between items-center p-3 bg-white/80 rounded-xl border border-gray-100 transition-all duration-300 hover:bg-white hover:translate-x-1">
-                <span class="font-medium text-gray-800 flex items-center gap-2">
-                  <span class="w-6 h-6 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white text-xs font-semibold">
-                    {{ getInitials(participant) }}
-                  </span>
-                  {{ participant }}
+          <div class="form-group">
+            <label>💰 Amount (₹)</label>
+            <input type="number" [(ngModel)]="newExpense.amount" placeholder="0" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>📝 Remark (optional)</label>
+          <input type="text" [(ngModel)]="newExpense.remark" placeholder="Additional notes" />
+        </div>
+
+        <div class="form-group">
+          <label>👥 Select Participants</label>
+          <div class="flex flex-wrap gap-2">
+            <label 
+              *ngFor="let member of group.members"
+              class="flex items-center gap-2 px-4 py-2 bg-white border-2 rounded-xl cursor-pointer transition-all duration-300 text-sm font-medium"
+              [ngClass]="isParticipant(member) ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-gray-200 hover:border-emerald-300'"
+            >
+              <input 
+                type="checkbox" 
+                [checked]="isParticipant(member)"
+                (change)="toggleParticipant(member)"
+                class="w-4 h-4 accent-emerald-500"
+              />
+              <span>{{ member }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div *ngIf="newExpense.splitAmong.length > 0" class="bg-white rounded-2xl p-4 border-2 border-gray-200">
+          <label class="block text-center mb-4 font-bold text-gray-900">💳 Who paid how much?</label>
+          <div class="space-y-2">
+            <div *ngFor="let member of newExpense.splitAmong" class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+              <label class="min-w-[120px] font-medium text-gray-900">{{ member }}</label>
+              <input 
+                type="number" 
+                [(ngModel)]="newExpense.contributionMap[member]"
+                placeholder="0"
+                class="flex-1 m-0"
+              />
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary w-full mt-4" (click)="addExpense()">
+          <span class="text-lg">🚀</span>
+          <span>Add Expense</span>
+        </button>
+      </div>
+
+      <!-- Expenses List - Timeline Style -->
+      <div class="space-y-3" *ngIf="group.expenses.length > 0">
+        <div *ngFor="let expense of group.expenses; let i = index" 
+             class="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-emerald-500 hover:shadow-lg transition-all duration-300">
+          <div 
+            class="p-5 cursor-pointer flex items-start gap-4"
+            (click)="toggleExpenseDetails(expense.expenseId)"
+          >
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-md flex-shrink-0"
+                 [ngClass]="{
+                   'bg-gradient-to-br from-emerald-500 to-emerald-600': i % 4 === 0,
+                   'bg-gradient-to-br from-purple-500 to-purple-600': i % 4 === 1,
+                   'bg-gradient-to-br from-blue-500 to-blue-600': i % 4 === 2,
+                   'bg-gradient-to-br from-orange-500 to-orange-600': i % 4 === 3
+                 }">
+              <span class="filter drop-shadow-sm">💵</span>
+            </div>
+            
+            <div class="flex-1">
+              <div class="flex items-start justify-between gap-4 mb-2">
+                <h4 class="text-lg font-bold text-gray-900 m-0">{{ expense.title }}</h4>
+                <div class="text-2xl font-bold text-emerald-600">₹{{ expense.amount }}</div>
+              </div>
+              <p *ngIf="expense.remark" class="text-sm text-gray-600 mb-2">{{ expense.remark }}</p>
+              <div class="flex items-center gap-4 text-xs text-gray-500">
+                <span class="flex items-center gap-1">
+                  <span>📅</span>
+                  <span>{{ formatDate(expense.timestamp) }}</span>
                 </span>
-                <span class="font-semibold text-primary text-sm">₹{{ getContributionAmount(expense, participant) | number:'1.2-2' }}</span>
+                <span class="flex items-center gap-1">
+                  <span>👥</span>
+                  <span>{{ expense.splitAmong.length }} participants</span>
+                </span>
+                <span 
+                  class="flex items-center gap-1 text-emerald-600 font-medium cursor-pointer"
+                >
+                  <span>{{ isExpenseExpanded(expense.expenseId) ? '▼' : '▶' }}</span>
+                  <span>{{ isExpenseExpanded(expense.expenseId) ? 'Hide' : 'Show' }} details</span>
+                </span>
               </div>
             </div>
           </div>
+          
+          <!-- Expense Details -->
+          <div *ngIf="isExpenseExpanded(expense.expenseId)" class="bg-gray-50 border-t-2 border-gray-200 p-5 animate-slide-up">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h5 class="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                  <span>👥</span>
+                  <span>Participants</span>
+                </h5>
+                <div class="flex flex-wrap gap-2">
+                  <span *ngFor="let participant of expense.splitAmong" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold bg-white border-2 border-gray-200">
+                    <span class="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold bg-gradient-to-br"
+                          [ngClass]="getMemberColorClass(participant)">
+                      {{ getInitials(participant) }}
+                    </span>
+                    {{ participant }}
+                  </span>
+                </div>
+                <div class="mt-3 p-3 bg-emerald-50 rounded-xl border border-emerald-200">
+                  <p class="text-sm text-emerald-700 m-0">
+                    💡 Share per person: <span class="font-bold">₹{{ getSharePerPerson(expense) | number:'1.2-2' }}</span>
+                  </p>
+                </div>
+              </div>
 
-          <div class="text-right pt-4 border-t border-gray-100">
-            <button class="btn btn-danger text-xs py-2 px-4 rounded-lg" (click)="deleteExpense(expense.expenseId); $event.stopPropagation()">
-              🗑️ Delete
-            </button>
+              <div>
+                <h5 class="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                  <span>💳</span>
+                  <span>Contributions</span>
+                </h5>
+                <div class="space-y-2">
+                  <div *ngFor="let participant of expense.splitAmong" class="flex justify-between items-center p-3 bg-white rounded-lg border border-gray-200">
+                    <span class="font-medium text-gray-900 flex items-center gap-2">
+                      <span class="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold bg-gradient-to-br"
+                            [ngClass]="getMemberColorClass(participant)">
+                        {{ getInitials(participant) }}
+                      </span>
+                      {{ participant }}
+                    </span>
+                    <span class="font-bold text-emerald-600">₹{{ getContributionAmount(expense, participant) | number:'1.2-2' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-right mt-4 pt-4 border-t border-gray-200">
+              <button class="btn btn-danger" (click)="deleteExpense(expense.expenseId); $event.stopPropagation()">
+                <span class="text-lg">🗑️</span>
+                <span>Delete Expense</span>
+              </button>
+            </div>
           </div>
         </div>
-      </li>
-    </ul>
+      </div>
 
-    <div *ngIf="group.expenses.length === 0" class="text-center py-16 px-5 bg-white/80 rounded-2xl border border-gray-100">
-      <div class="text-5xl mb-4 opacity-60">💵</div>
-      <h4 class="text-lg font-semibold text-gray-800 mb-2">No Expenses Yet</h4>
-      <p class="text-gray-600 text-sm mb-0">Add your first expense to start tracking</p>
+      <div *ngIf="group.expenses.length === 0" class="text-center py-16">
+        <div class="text-6xl mb-4 opacity-40">💵</div>
+        <h4 class="text-xl font-bold text-gray-900 mb-2">No Expenses Yet</h4>
+        <p class="text-gray-600">Add your first expense to start tracking</p>
+      </div>
     </div>
   </div>
 
   <!-- Balances Tab -->
-  <div *ngIf="activeTab === 'balances'" class="card">
-    <div class="flex justify-between items-center mb-5 pb-4 border-b-2 border-primary/10">
-      <h3 class="flex items-center gap-3 m-0 text-xl font-semibold text-gray-800">
+  <div *ngIf="activeTab === 'balances'">
+    <div class="card">
+      <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
         <span class="text-2xl">⚖️</span>
-        Member Balances
+        <span>Member Balances</span>
       </h3>
-    </div>
-    
-    <ul class="list-none p-0" *ngIf="balances.length > 0">
-      <li *ngFor="let balance of balances" class="flex justify-between items-center p-5 border-b border-gray-100 transition-all duration-300 hover:bg-primary/2 hover:translate-x-1 last:border-b-0">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white text-base font-semibold">
-            {{ getInitials(balance.member) }}
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" *ngIf="balances.length > 0">
+        <div *ngFor="let balance of balances" 
+             class="bg-white border-2 rounded-2xl p-5 hover:shadow-lg transition-all duration-300"
+             [ngClass]="{
+               'border-emerald-200 hover:border-emerald-400': balance.netBalance > 0,
+               'border-red-200 hover:border-red-400': balance.netBalance < 0,
+               'border-gray-200 hover:border-gray-300': balance.netBalance === 0
+             }">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-14 h-14 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md bg-gradient-to-br"
+                 [ngClass]="getMemberColorClass(balance.member)">
+              {{ getInitials(balance.member) }}
+            </div>
+            <div class="flex-1">
+              <h4 class="font-bold text-gray-900 text-lg m-0">{{ balance.member }}</h4>
+              <div 
+                class="text-2xl font-bold mt-1"
+                [ngClass]="{
+                  'text-emerald-600': balance.netBalance > 0,
+                  'text-red-600': balance.netBalance < 0,
+                  'text-gray-600': balance.netBalance === 0
+                }"
+              >
+                {{ balance.netBalance > 0 ? '+' : '' }}₹{{ balance.netBalance.toFixed(2) }}
+              </div>
+            </div>
           </div>
-          <div>
-            <h4 class="m-0 mb-1 text-base font-semibold text-gray-800">{{ balance.member }}</h4>
-            <div class="flex gap-4 text-xs text-gray-600">
-              <span>💰 Paid: ₹{{ balance.totalPaid.toFixed(2) }}</span>
-              <span>📊 Owes: ₹{{ balance.totalOwed.toFixed(2) }}</span>
+          <div class="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200">
+            <div class="text-center p-2 bg-emerald-50 rounded-lg">
+              <div class="text-xs text-emerald-700 font-medium mb-1">Paid</div>
+              <div class="text-sm font-bold text-emerald-600">₹{{ balance.totalPaid.toFixed(2) }}</div>
+            </div>
+            <div class="text-center p-2 bg-red-50 rounded-lg">
+              <div class="text-xs text-red-700 font-medium mb-1">Owes</div>
+              <div class="text-sm font-bold text-red-600">₹{{ balance.totalOwed.toFixed(2) }}</div>
             </div>
           </div>
         </div>
-        <div 
-          class="font-bold text-lg text-right"
-          [ngClass]="{
-            'text-green-600': balance.netBalance > 0,
-            'text-red-600': balance.netBalance < 0
-          }"
-        >
-          {{ balance.netBalance > 0 ? '+' : '' }}₹{{ balance.netBalance.toFixed(2) }}
-        </div>
-      </li>
-    </ul>
+      </div>
 
-    <div *ngIf="balances.length === 0" class="text-center py-16 px-5 bg-white/80 rounded-2xl border border-gray-100">
-      <div class="text-5xl mb-4 opacity-60">⚖️</div>
-      <h4 class="text-lg font-semibold text-gray-800 mb-2">No Balances Yet</h4>
-      <p class="text-gray-600 text-sm mb-0">Add expenses to see member balances</p>
+      <div *ngIf="balances.length === 0" class="text-center py-16">
+        <div class="text-6xl mb-4 opacity-40">⚖️</div>
+        <h4 class="text-xl font-bold text-gray-900 mb-2">No Balances Yet</h4>
+        <p class="text-gray-600">Add expenses to see member balances</p>
+      </div>
     </div>
   </div>
 
   <!-- Settlements Tab -->
-  <div *ngIf="activeTab === 'settlements'" class="card">
-    <div class="flex justify-between items-center mb-5 pb-4 border-b-2 border-primary/10">
-      <h3 class="flex items-center gap-3 m-0 text-xl font-semibold text-gray-800">
+  <div *ngIf="activeTab === 'settlements'">
+    <div class="card">
+      <h3 class="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
         <span class="text-2xl">🤝</span>
-        Who Owes Whom
+        <span>Suggested Settlements</span>
       </h3>
-    </div>
-    
-    <ul class="list-none p-0" *ngIf="settlements.length > 0">
-      <li *ngFor="let settlement of settlements" class="flex justify-between items-center p-5 bg-white/50 mb-3 rounded-2xl border border-gray-100 transition-all duration-300 hover:bg-white/80 hover:-translate-y-0.5 hover:shadow-md last:mb-0">
-        <div class="flex-1 flex items-center gap-4">
-          <div class="flex items-center gap-3">
-            <div class="w-9 h-9 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white text-sm font-semibold">
-              {{ getInitials(settlement.from) }}
+      
+      <div class="space-y-3" *ngIf="settlements.length > 0">
+        <div *ngFor="let settlement of settlements" 
+             class="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-2xl p-5 hover:shadow-lg transition-all duration-300">
+          <div class="flex items-center justify-between gap-4">
+            <div class="flex items-center gap-4 flex-1">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold shadow-md bg-gradient-to-br"
+                     [ngClass]="getMemberColorClass(settlement.from)">
+                  {{ getInitials(settlement.from) }}
+                </div>
+                <span class="text-2xl text-blue-600">→</span>
+                <div class="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold shadow-md bg-gradient-to-br"
+                     [ngClass]="getMemberColorClass(settlement.to)">
+                  {{ getInitials(settlement.to) }}
+                </div>
+              </div>
+              <div>
+                <div class="font-bold text-gray-900 mb-1">{{ settlement.from }} pays {{ settlement.to }}</div>
+                <div class="text-2xl font-bold text-blue-600">₹{{ settlement.amount }}</div>
+              </div>
             </div>
-            <span class="text-primary font-semibold text-lg mx-2">→</span>
-            <div class="w-9 h-9 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white text-sm font-semibold">
-              {{ getInitials(settlement.to) }}
-            </div>
-          </div>
-          <div>
-            <h4 class="m-0 mb-1 text-base font-semibold text-gray-800">{{ settlement.from }} → {{ settlement.to }}</h4>
-            <div class="text-lg font-bold text-primary">₹{{ settlement.amount }}</div>
+            <button class="btn btn-primary" (click)="settleUp(settlement)">
+              <span class="text-lg">✅</span>
+              <span>Settle Up</span>
+            </button>
           </div>
         </div>
-        <button class="btn btn-primary" (click)="settleUp(settlement)">
-          <span class="mr-2">✅</span>
-          Settle Up
-        </button>
-      </li>
-    </ul>
-
-    <div *ngIf="settlements.length === 0" class="text-center py-16 px-5 bg-white/80 rounded-2xl border border-gray-100">
-      <div class="text-5xl mb-4 opacity-60">🎉</div>
-      <h4 class="text-lg font-semibold text-gray-800 mb-2">All Settled Up!</h4>
-      <p class="text-gray-600 text-sm mb-0">Everyone is even - no pending settlements</p>
-    </div>
-
-    <div *ngIf="group.settlements.length > 0" class="mt-10">
-      <div class="flex justify-between items-center mb-5 pb-4 border-b-2 border-primary/10">
-        <h3 class="flex items-center gap-3 m-0 text-xl font-semibold text-gray-800">
-          <span class="text-2xl">📜</span>
-          Settlement History
-        </h3>
       </div>
-      <ul class="list-none p-0">
-        <li *ngFor="let settlement of group.settlements" class="flex justify-between items-center p-5 bg-white/50 mb-3 rounded-2xl border border-gray-100 last:mb-0">
-          <div class="flex-1 flex items-center gap-4">
+
+      <div *ngIf="settlements.length === 0" class="text-center py-16">
+        <div class="text-6xl mb-4">🎉</div>
+        <h4 class="text-xl font-bold text-gray-900 mb-2">All Settled Up!</h4>
+        <p class="text-gray-600">Everyone is even - no pending settlements</p>
+      </div>
+
+      <!-- Settlement History -->
+      <div *ngIf="group.settlements.length > 0" class="mt-8 pt-8 border-t-2 border-gray-200">
+        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <span class="text-2xl">📜</span>
+          <span>Settlement History</span>
+        </h3>
+        <div class="space-y-2">
+          <div *ngFor="let settlement of group.settlements" 
+               class="bg-gray-50 border border-gray-200 rounded-xl p-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <div class="w-9 h-9 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white text-sm font-semibold">
-                {{ getInitials(settlement.from) }}
+              <div class="flex items-center gap-2">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-gradient-to-br"
+                     [ngClass]="getMemberColorClass(settlement.from)">
+                  {{ getInitials(settlement.from) }}
+                </div>
+                <span class="text-gray-600">→</span>
+                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm bg-gradient-to-br"
+                     [ngClass]="getMemberColorClass(settlement.to)">
+                  {{ getInitials(settlement.to) }}
+                </div>
               </div>
-              <span class="text-primary font-semibold text-lg mx-2">→</span>
-              <div class="w-9 h-9 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-white text-sm font-semibold">
-                {{ getInitials(settlement.to) }}
+              <div>
+                <div class="font-medium text-gray-900">{{ settlement.from }} → {{ settlement.to }}</div>
+                <div class="text-sm text-gray-600">{{ formatDate(settlement.timestamp) }}</div>
               </div>
             </div>
-            <div>
-              <h4 class="m-0 mb-1 text-base font-semibold text-gray-800">{{ settlement.from }} → {{ settlement.to }}</h4>
-              <div class="text-lg font-bold text-primary">₹{{ settlement.amount }}</div>
-              <div class="text-xs text-gray-500">{{ formatDate(settlement.timestamp) }}</div>
+            <div class="flex items-center gap-3">
+              <div class="font-bold text-gray-900">₹{{ settlement.amount }}</div>
+              <span class="text-2xl">✅</span>
             </div>
           </div>
-          <span class="text-primary text-2xl">✅</span>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   </div>
 </div>

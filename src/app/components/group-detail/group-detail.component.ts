@@ -99,7 +99,37 @@ export class GroupDetailComponent implements OnInit {
 
   // Helper methods for UI
   getInitials(name: string): string {
+    if (!name) return '?';
     return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+  }
+
+  // Get consistent color for a member based on their name
+  getMemberColorClass(memberName: string): string {
+    if (!memberName) return 'from-gray-500 to-gray-600';
+    
+    // Create a simple hash from the member name
+    let hash = 0;
+    for (let i = 0; i < memberName.length; i++) {
+      hash = memberName.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    
+    // Use absolute value and modulo to get consistent color index
+    const colorIndex = Math.abs(hash) % 4;
+    
+    const colors = [
+      'from-emerald-500 to-emerald-600',
+      'from-purple-500 to-purple-600',
+      'from-blue-500 to-blue-600',
+      'from-orange-500 to-orange-600'
+    ];
+    
+    return colors[colorIndex];
+  }
+
+  // Get member index for consistent ordering
+  getMemberIndex(memberName: string): number {
+    if (!this.group || !memberName) return 0;
+    return this.group.members.indexOf(memberName);
   }
 
   // Member Management

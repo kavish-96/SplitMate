@@ -8,7 +8,7 @@
   }
 
   body {
-    @apply font-sans bg-gradient-to-br from-gray-50 to-gray-100 text-gray-800 leading-relaxed min-h-screen;
+    @apply font-sans bg-gradient-to-br from-emerald-50 via-purple-50 to-blue-50 text-gray-800 leading-relaxed min-h-screen;
   }
 }
 
@@ -18,68 +18,47 @@
     @apply max-w-7xl mx-auto px-5;
   }
 
-  /* Card */
+  /* Card - Varied Styles */
   .card {
-    @apply bg-white/95 backdrop-blur-md rounded-2xl shadow-lg p-6 mb-6 border border-gray-100 transition-all duration-300;
+    @apply bg-white rounded-3xl shadow-md p-8 mb-6 border border-gray-200/50 transition-all duration-300;
   }
 
   .card:hover {
-    @apply -translate-y-0.5 shadow-xl;
+    @apply shadow-xl;
   }
 
-  /* Buttons */
+  /* Buttons - More Variety */
   .btn {
-    @apply px-6 py-3 border-0 rounded-xl cursor-pointer text-sm font-semibold transition-all duration-300 relative overflow-hidden uppercase tracking-wide;
-  }
-
-  .btn::before {
-    content: '';
-    @apply absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-all duration-500;
-  }
-
-  .btn:hover::before {
-    @apply left-full;
+    @apply px-6 py-3 border-0 rounded-2xl cursor-pointer text-sm font-semibold transition-all duration-300 inline-flex items-center justify-center gap-2;
   }
 
   .btn-primary {
-    @apply bg-gradient-to-br from-primary to-primary-dark text-white shadow-lg shadow-primary/30;
-  }
-
-  .btn-primary:hover {
-    @apply -translate-y-0.5 shadow-xl shadow-primary/40;
+    @apply bg-primary text-white shadow-md hover:shadow-lg hover:bg-primary-dark hover:-translate-y-0.5;
   }
 
   .btn-secondary {
-    @apply bg-gradient-to-br from-gray-100 to-gray-200 text-gray-700 shadow-md;
-  }
-
-  .btn-secondary:hover {
-    @apply -translate-y-0.5 bg-gradient-to-br from-gray-200 to-gray-300;
+    @apply bg-secondary text-white shadow-md hover:shadow-lg hover:bg-secondary-dark hover:-translate-y-0.5;
   }
 
   .btn-danger {
-    @apply bg-gradient-to-br from-red-500 to-red-600 text-white shadow-lg shadow-red-500/30;
+    @apply bg-red-500 text-white shadow-md hover:shadow-lg hover:bg-red-600 hover:-translate-y-0.5;
   }
 
-  .btn-danger:hover {
-    @apply -translate-y-0.5 shadow-xl shadow-red-500/40;
+  .btn-outline {
+    @apply bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white;
   }
 
   .btn:disabled {
-    @apply opacity-60 cursor-not-allowed;
-  }
-
-  .btn:disabled:hover {
-    @apply translate-y-0 shadow-none;
+    @apply opacity-50 cursor-not-allowed hover:translate-y-0 hover:shadow-md;
   }
 
   /* Form Elements */
   input, select, textarea {
-    @apply w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl text-sm mb-4 transition-all duration-300 bg-white/80 backdrop-blur-sm;
+    @apply w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-sm mb-4 transition-all duration-300 bg-white;
   }
 
   input:focus, select:focus, textarea:focus {
-    @apply outline-none border-primary shadow-lg shadow-primary/10 bg-white/95;
+    @apply outline-none border-primary ring-4 ring-primary/10;
   }
 
   .form-group {
@@ -87,26 +66,41 @@
   }
 
   label {
-    @apply block mb-2 font-semibold text-gray-700 text-sm uppercase tracking-wide;
+    @apply block mb-2 font-semibold text-gray-700 text-sm;
   }
 
-  /* Utility Classes */
-  .positive {
-    @apply text-green-600 font-semibold;
+  /* Badge Styles */
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold;
   }
 
-  .negative {
-    @apply text-red-600 font-semibold;
+  .badge-primary {
+    @apply bg-primary/10 text-primary border border-primary/20;
   }
 
-  /* Gradient Text */
-  .gradient-text {
-    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+  .badge-secondary {
+    @apply bg-secondary/10 text-secondary border border-secondary/20;
   }
 
-  /* Glass Effect */
-  .glass {
-    @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl;
+  .badge-success {
+    @apply bg-emerald-100 text-emerald-700 border border-emerald-200;
+  }
+
+  .badge-warning {
+    @apply bg-amber-100 text-amber-700 border border-amber-200;
+  }
+
+  /* Avatar */
+  .avatar {
+    @apply w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm;
+  }
+
+  .avatar-sm {
+    @apply w-8 h-8 text-xs;
+  }
+
+  .avatar-lg {
+    @apply w-12 h-12 text-base;
   }
 
   /* Scrollbar */
@@ -115,15 +109,11 @@
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-black/5 rounded;
+    @apply bg-gray-100 rounded;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-gradient-to-b from-primary to-secondary rounded;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    @apply from-primary-dark to-secondary-dark;
+    @apply bg-primary rounded hover:bg-primary-dark;
   }
 }
 
