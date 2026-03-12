@@ -114,13 +114,22 @@ export class GroupDetailComponent implements OnInit {
     }
     
     // Use absolute value and modulo to get consistent color index
-    const colorIndex = Math.abs(hash) % 4;
+    // Expanded to 12 colors for better variety
+    const colorIndex = Math.abs(hash) % 12;
     
     const colors = [
-      'from-emerald-500 to-emerald-600',
-      'from-purple-500 to-purple-600',
-      'from-blue-500 to-blue-600',
-      'from-orange-500 to-orange-600'
+      'from-emerald-500 to-emerald-600',      // Green
+      'from-purple-500 to-purple-600',        // Purple
+      'from-blue-500 to-blue-600',            // Blue
+      'from-orange-500 to-orange-600',        // Orange
+      'from-pink-500 to-pink-600',            // Pink
+      'from-indigo-500 to-indigo-600',        // Indigo
+      'from-teal-500 to-teal-600',            // Teal
+      'from-red-500 to-red-600',              // Red
+      'from-cyan-500 to-cyan-600',            // Cyan
+      'from-amber-500 to-amber-600',          // Amber
+      'from-violet-500 to-violet-600',        // Violet
+      'from-lime-500 to-lime-600'             // Lime
     ];
     
     return colors[colorIndex];

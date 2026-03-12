@@ -1,15 +1,23 @@
 <div class="container py-8">
   <!-- Modern Header with Stats -->
   <div class="mb-8">
+
     <!-- Brand Section -->
-    <div class="flex items-center gap-4 mb-6">
-      <div class="w-14 h-14 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center text-3xl shadow-lg">
+    <div class="flex flex-col items-center text-center gap-3 mb-10">
+      
+      <div class="w-16 h-16 bg-gradient-to-br from-primary to-secondary 
+                  rounded-2xl flex items-center justify-center 
+                  text-3xl shadow-lg">
         💰
       </div>
-      <div>
-        <h1 class="text-4xl font-bold text-gray-900 m-0">SplitMate</h1>
-        <p class="text-gray-600 text-sm m-0">Track, Split, and Settle Shared Expenses</p>
+
+      <div class="space-y-1">
+        <h1 class="text-4xl font-bold text-gray-900">SplitMate</h1>
+        <p class="text-gray-500 text-sm">
+          Track, Split, and Settle Shared Expenses
+        </p>
       </div>
+
     </div>
 
     <!-- Statistics Grid -->
@@ -93,17 +101,15 @@
     <!-- Groups List - Varied Card Designs -->
     <div *ngIf="groups.length > 0" class="space-y-4">
       <div 
-        *ngFor="let group of groups; let i = index" 
+        *ngFor="let group of groups" 
         class="group relative bg-white border-2 border-gray-200 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:border-primary hover:shadow-lg hover:-translate-y-1"
         (click)="openGroup(group.groupId)"
       >
         <!-- Colored Left Border -->
         <div class="absolute left-0 top-0 bottom-0 w-1.5 rounded-l-2xl transition-all duration-300"
              [ngClass]="{
-               'bg-gradient-to-b from-emerald-500 to-emerald-600': i % 4 === 0,
-               'bg-gradient-to-b from-purple-500 to-purple-600': i % 4 === 1,
-               'bg-gradient-to-b from-blue-500 to-blue-600': i % 4 === 2,
-               'bg-gradient-to-b from-orange-500 to-orange-600': i % 4 === 3
+               'bg-gradient-to-b from-amber-500 to-amber-600': getGroupStatus(group) === 'status-settled',
+               'bg-gradient-to-b from-primary to-primary-dark': getGroupStatus(group) !== 'status-settled'
              }">
         </div>
 
@@ -111,17 +117,6 @@
           <!-- Group Info -->
           <div class="flex-1">
             <div class="flex items-center gap-3 mb-3">
-              <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-md"
-                   [ngClass]="{
-                     'bg-gradient-to-br from-emerald-500 to-emerald-600': i % 4 === 0,
-                     'bg-gradient-to-br from-purple-500 to-purple-600': i % 4 === 1,
-                     'bg-gradient-to-br from-blue-500 to-blue-600': i % 4 === 2,
-                     'bg-gradient-to-br from-orange-500 to-orange-600': i % 4 === 3
-                   }">
-                <span class="filter drop-shadow-sm">
-                  {{ i % 4 === 0 ? '🌴' : i % 4 === 1 ? '🏠' : i % 4 === 2 ? '🍕' : '✈️' }}
-                </span>
-              </div>
               <div class="flex-1">
                 <h3 class="text-xl font-bold text-gray-900 m-0 mb-1">{{ group.groupName }}</h3>
                 <div class="flex items-center gap-4">
@@ -138,7 +133,7 @@
             </div>
 
             <!-- Stats Row -->
-            <div class="flex items-center gap-6 ml-15">
+            <div class="flex items-center gap-6">
               <div class="flex items-center gap-2 text-gray-600">
                 <span class="text-lg">👥</span>
                 <span class="text-sm font-medium">{{ group.members.length }} {{ group.members.length === 1 ? 'member' : 'members' }}</span>
@@ -168,14 +163,4 @@
     </div>
   </div>
 
-  <!-- Footer Tip -->
-  <div class="mt-8 bg-gradient-to-r from-primary/10 via-secondary/10 to-blue-500/10 rounded-2xl p-6 border border-primary/20">
-    <div class="flex items-center gap-4">
-      <div class="text-4xl">💡</div>
-      <div class="flex-1">
-        <h4 class="font-bold text-gray-900 mb-1">Pro Tip</h4>
-        <p class="text-gray-700 text-sm m-0">Split expenses fairly and settle up easily with our optimized settlement algorithm that minimizes transactions</p>
-      </div>
-    </div>
-  </div>
 </div>

@@ -178,19 +178,13 @@
 
       <!-- Expenses List - Timeline Style -->
       <div class="space-y-3" *ngIf="group.expenses.length > 0">
-        <div *ngFor="let expense of group.expenses; let i = index" 
+        <div *ngFor="let expense of group.expenses" 
              class="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-emerald-500 hover:shadow-lg transition-all duration-300">
           <div 
             class="p-5 cursor-pointer flex items-start gap-4"
             (click)="toggleExpenseDetails(expense.expenseId)"
           >
-            <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-md flex-shrink-0"
-                 [ngClass]="{
-                   'bg-gradient-to-br from-emerald-500 to-emerald-600': i % 4 === 0,
-                   'bg-gradient-to-br from-purple-500 to-purple-600': i % 4 === 1,
-                   'bg-gradient-to-br from-blue-500 to-blue-600': i % 4 === 2,
-                   'bg-gradient-to-br from-orange-500 to-orange-600': i % 4 === 3
-                 }">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-md flex-shrink-0 bg-white border-2 border-gray-200">
               <span class="filter drop-shadow-sm">💵</span>
             </div>
             
@@ -206,7 +200,7 @@
                   <span>{{ formatDate(expense.timestamp) }}</span>
                 </span>
                 <span class="flex items-center gap-1">
-                  <span>👥</span>
+                  <span>�</span>
                   <span>{{ expense.splitAmong.length }} participants</span>
                 </span>
                 <span 
@@ -347,7 +341,7 @@
       
       <div class="space-y-3" *ngIf="settlements.length > 0">
         <div *ngFor="let settlement of settlements" 
-             class="bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-2xl p-5 hover:shadow-lg transition-all duration-300">
+             class="border-2 border-200 rounded-2xl p-5 hover:shadow-lg transition-all duration-300">
           <div class="flex items-center justify-between gap-4">
             <div class="flex items-center gap-4 flex-1">
               <div class="flex items-center gap-3">
@@ -363,7 +357,7 @@
               </div>
               <div>
                 <div class="font-bold text-gray-900 mb-1">{{ settlement.from }} pays {{ settlement.to }}</div>
-                <div class="text-2xl font-bold text-blue-600">₹{{ settlement.amount }}</div>
+                <div class="text-2xl font-bold text-600">₹{{ settlement.amount }}</div>
               </div>
             </div>
             <button class="btn btn-primary" (click)="settleUp(settlement)">
