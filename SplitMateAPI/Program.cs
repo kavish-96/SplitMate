@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using SplitMateAPI.Data;
 using SplitMateAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,10 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddControllers();
 
-// Register application services as Singletons (in-memory storage)
-builder.Services.AddSingleton<DataService>();
-builder.Services.AddSingleton<BalanceService>();
-builder.Services.AddSingleton<SettlementService>();
+// Configure SQLite Database
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite("Data Source=splitmate.db"));
+
+// Register application services
+builder.Services.AddScoped<DataService>();
+builder.Services.AddScoped<BalanceService>();
+builder.Services.AddScoped<SettlementService>();
 
 // Configure CORS to allow Angular app
 builder.Services.AddCors(options =>

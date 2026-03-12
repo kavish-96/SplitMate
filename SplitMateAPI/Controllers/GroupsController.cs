@@ -16,15 +16,15 @@ namespace SplitMateAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Group>> GetAllGroups()
+        public async Task<ActionResult<List<Group>>> GetAllGroups()
         {
-            return Ok(_dataService.GetAllGroups());
+            return Ok(await _dataService.GetAllGroupsAsync());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Group> GetGroup(string id)
+        public async Task<ActionResult<Group>> GetGroup(string id)
         {
-            var group = _dataService.GetGroupById(id);
+            var group = await _dataService.GetGroupByIdAsync(id);
             if (group == null)
             {
                 return NotFound();
@@ -33,16 +33,16 @@ namespace SplitMateAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Group> CreateGroup([FromBody] CreateGroupRequest request)
+        public async Task<ActionResult<Group>> CreateGroup([FromBody] CreateGroupRequest request)
         {
-            var group = _dataService.CreateGroup(request.GroupName);
+            var group = await _dataService.CreateGroupAsync(request.GroupName);
             return CreatedAtAction(nameof(GetGroup), new { id = group.GroupId }, group);
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteGroup(string id)
+        public async Task<ActionResult> DeleteGroup(string id)
         {
-            var result = _dataService.DeleteGroup(id);
+            var result = await _dataService.DeleteGroupAsync(id);
             if (!result)
             {
                 return NotFound();
@@ -51,9 +51,9 @@ namespace SplitMateAPI.Controllers
         }
 
         [HttpPost("{id}/members")]
-        public ActionResult AddMember(string id, [FromBody] AddMemberRequest request)
+        public async Task<ActionResult> AddMember(string id, [FromBody] AddMemberRequest request)
         {
-            var result = _dataService.AddMember(id, request.MemberName);
+            var result = await _dataService.AddMemberAsync(id, request.MemberName);
             if (!result)
             {
                 return NotFound();
@@ -62,9 +62,9 @@ namespace SplitMateAPI.Controllers
         }
 
         [HttpDelete("{id}/members/{memberName}")]
-        public ActionResult RemoveMember(string id, string memberName)
+        public async Task<ActionResult> RemoveMember(string id, string memberName)
         {
-            var result = _dataService.RemoveMember(id, memberName);
+            var result = await _dataService.RemoveMemberAsync(id, memberName);
             if (!result)
             {
                 return NotFound();

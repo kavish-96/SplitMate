@@ -3,3 +3,9 @@ dist/
 .angular/
 *.log
 .DS_Store
+
+# SQLite Database
+*.db
+*.db-shm
+*.db-wal
+SplitMateAPI/Migrations/

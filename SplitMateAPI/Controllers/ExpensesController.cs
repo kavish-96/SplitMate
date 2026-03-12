@@ -16,9 +16,9 @@ namespace SplitMateAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Expense> AddExpense(string groupId, [FromBody] Expense expense)
+        public async Task<ActionResult<Expense>> AddExpense(string groupId, [FromBody] Expense expense)
         {
-            var result = _dataService.AddExpense(groupId, expense);
+            var result = await _dataService.AddExpenseAsync(groupId, expense);
             if (result == null)
             {
                 return NotFound();
@@ -27,9 +27,9 @@ namespace SplitMateAPI.Controllers
         }
 
         [HttpDelete("{expenseId}")]
-        public ActionResult DeleteExpense(string groupId, string expenseId)
+        public async Task<ActionResult> DeleteExpense(string groupId, string expenseId)
         {
-            var result = _dataService.DeleteExpense(groupId, expenseId);
+            var result = await _dataService.DeleteExpenseAsync(groupId, expenseId);
             if (!result)
             {
                 return NotFound();

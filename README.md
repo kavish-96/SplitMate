@@ -7,6 +7,7 @@ A full-stack expense splitting application built with **Angular** and **ASP.NET 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
 [![C#](https://img.shields.io/badge/C%23-12-purple?logo=csharp)](https://docs.microsoft.com/en-us/dotnet/csharp/)
+[![SQLite](https://img.shields.io/badge/SQLite-3-003B57?logo=sqlite)](https://www.sqlite.org/)
 
 ---
 
@@ -70,10 +71,11 @@ SplitMate is a modern web application that simplifies the process of splitting e
 ### Backend
 - **ASP.NET Core 9.0** - Web API framework
 - **C# 12** - Modern programming language
+- **Entity Framework Core 9.0** - ORM for database access
+- **SQLite** - Lightweight embedded database
 - **Minimal API** - Lightweight API architecture
 - **Dependency Injection** - Service management
 - **CORS** - Cross-origin resource sharing
-- **In-Memory Storage** - Fast data access
 
 ---
 
@@ -171,7 +173,15 @@ Before you begin, ensure you have the following installed:
    npm install
    ```
 
-3. **Verify installations**
+3. **Setup SQLite Database**
+   ```bash
+   cd SplitMateAPI
+   dotnet ef database update
+   cd ..
+   ```
+   This creates the `splitmate.db` SQLite database file with the required schema.
+
+4. **Verify installations**
    ```bash
    node --version
    dotnet --version

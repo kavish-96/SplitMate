@@ -1,22 +1,29 @@
+using Microsoft.EntityFrameworkCore;
+using SplitMateAPI.Data;
 using SplitMateAPI.Models;
 
 namespace SplitMateAPI.Services
 {
     public class DataService
     {
-        private readonly List<Group> _groups = new List<Group>();
+        private readonly AppDbContext _context;
 
-        public List<Group> GetAllGroups()
+        public DataService(AppDbContext context)
         {
-            return _groups;
+            _context = context;
         }
 
-        public Group? GetGroupById(string groupId)
+        public async Task<List<Group>> GetAllGroupsAsync()
         {
-            return _groups.FirstOrDefault(g => g.GroupId == groupId);
+            return await _context.Groups.ToListAsync();
         }
 
-        public Group CreateGroup(string groupName)
+        public async Task<Group?> GetGroupByIdAsync(string groupId)
+        {
+            return await _context.Groups.FirstOrDefaultAsync(g => g.GroupId == groupId);
+        }
+
+        public async Task<Group> CreateGroupAsync(string groupName)
         {
             var group = new Group
             {
@@ -26,78 +33,94 @@ namespace SplitMateAPI.Services
                 Expenses = new List<Expense>(),
                 Settlements = new List<Settlement>()
             };
-            _groups.Add(group);
+            _context.Groups.Add(group);
+            await _context.SaveChangesAsync();
             return group;
         }
 
-        public bool DeleteGroup(string groupId)
+        public async Task<bool> DeleteGroupAsync(string groupId)
         {
-            var group = GetGroupById(groupId);
+            var group = await GetGroupByIdAsync(groupId);
             if (group != null)
             {
-                _groups.Remove(group);
+                _context.Groups.Remove(group);
+                await _context.SaveChangesAsync();
                 return true;
             }
             return false;
         }
 
-        public bool AddMember(string groupId, string memberName)
+        public async Task<bool> AddMemberAsync(string groupId, string memberName)
         {
-            var group = GetGroupById(groupId);
+            var group = await GetGroupByIdAsync(groupId);
             if (group != null && !group.Members.Contains(memberName))
             {
                 group.Members.Add(memberName);
+                _context.Groups.Update(group);
+                await _context.SaveChangesAsync();
                 return true;
             }
             return false;
         }
 
-        public bool RemoveMember(string groupId, string memberName)
+        public async Task<bool> RemoveMemberAsync(string groupId, string memberName)
         {
-            var group = GetGroupById(groupId);
+            var group = await GetGroupByIdAsync(groupId);
             if (group != null)
             {
-                return group.Members.Remove(memberName);
+                var removed = group.Members.Remove(memberName);
+                if (removed)
+                {
+                    _context.Groups.Update(group);
+                    await _context.SaveChangesAsync();
+                }
+                return removed;
             }
             return false;
         }
 
-        public Expense? AddExpense(string groupId, Expense expense)
+        public async Task<Expense?> AddExpenseAsync(string groupId, Expense expense)
         {
-            var group = GetGroupById(groupId);
+            var group = await GetGroupByIdAsync(groupId);
             if (group != null)
             {
                 expense.ExpenseId = Guid.NewGuid().ToString();
                 expense.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 group.Expenses.Add(expense);
+                _context.Groups.Update(group);
+                await _context.SaveChangesAsync();
                 return expense;
             }
             return null;
         }
 
-        public bool DeleteExpense(string groupId, string expenseId)
+        public async Task<bool> DeleteExpenseAsync(string groupId, string expenseId)
         {
-            var group = GetGroupById(groupId);
+            var group = await GetGroupByIdAsync(groupId);
             if (group != null)
             {
                 var expense = group.Expenses.FirstOrDefault(e => e.ExpenseId == expenseId);
                 if (expense != null)
                 {
                     group.Expenses.Remove(expense);
+                    _context.Groups.Update(group);
+                    await _context.SaveChangesAsync();
                     return true;
                 }
             }
             return false;
         }
 
-        public Settlement? AddSettlement(string groupId, Settlement settlement)
+        public async Task<Settlement?> AddSettlementAsync(string groupId, Settlement settlement)
         {
-            var group = GetGroupById(groupId);
+            var group = await GetGroupByIdAsync(groupId);
             if (group != null)
             {
                 settlement.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 settlement.Completed = true;
                 group.Settlements.Add(settlement);
+                _context.Groups.Update(group);
+                await _context.SaveChangesAsync();
                 return settlement;
             }
             return null;

@@ -18,9 +18,9 @@ namespace SplitMateAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Balance>> GetBalances(string groupId)
+        public async Task<ActionResult<List<Balance>>> GetBalances(string groupId)
         {
-            var group = _dataService.GetGroupById(groupId);
+            var group = await _dataService.GetGroupByIdAsync(groupId);
             if (group == null)
             {
                 return NotFound();

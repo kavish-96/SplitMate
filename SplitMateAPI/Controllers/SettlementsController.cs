@@ -18,9 +18,9 @@ namespace SplitMateAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Transaction>> GetSettlements(string groupId)
+        public async Task<ActionResult<List<Transaction>>> GetSettlements(string groupId)
         {
-            var group = _dataService.GetGroupById(groupId);
+            var group = await _dataService.GetGroupByIdAsync(groupId);
             if (group == null)
             {
                 return NotFound();
@@ -31,9 +31,9 @@ namespace SplitMateAPI.Controllers
         }
 
         [HttpPost]
-        public ActionResult SettleUp(string groupId, [FromBody] Settlement settlement)
+        public async Task<ActionResult> SettleUp(string groupId, [FromBody] Settlement settlement)
         {
-            var result = _dataService.AddSettlement(groupId, settlement);
+            var result = await _dataService.AddSettlementAsync(groupId, settlement);
             if (result == null)
             {
                 return NotFound();
