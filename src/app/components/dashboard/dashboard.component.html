@@ -128,7 +128,7 @@
                   <span class="badge"
                         [ngClass]="{
                           'badge-primary': getGroupStatus(group) === 'status-active',
-                          'badge-success': getGroupStatus(group) === 'status-settled',
+                          'badge-warning': getGroupStatus(group) === 'status-settled',
                           'bg-gray-100 text-gray-600 border-gray-200': getGroupStatus(group) === 'status-empty'
                         }">
                     {{ getGroupStatusText(group) }}

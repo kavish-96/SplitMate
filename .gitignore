@@ -9,3 +9,26 @@ dist/
 *.db-shm
 *.db-wal
 SplitMateAPI/Migrations/
+
+# .NET Build Output
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+
+# .NET User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+*.vsidx
+*.vspscc
+*.vssscc
+
+# Rider
+.idea/
+*.sln.iml
